@@ -68,7 +68,7 @@ jobs:
           path: ${{ inputs.directory }}/${{ inputs.name }}.pdf
 
       - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v6
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "${{ inputs.directory }}"
       

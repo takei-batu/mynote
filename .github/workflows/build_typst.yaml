@@ -30,8 +30,14 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v6
+      - name: Install Japanese Fonts
+        run: |
+          mkdir -p ~/.local/share/fonts
+          curl -L "https://github.com/googlefonts/noto-cjk/raw/main/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf" -o ~/.local/share/fonts/NotoSansCJKjp-Regular.otf
+          fc-cache -f -v
+
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v6
 
       - name: 変更された.typを取得
         if: github.event_name == 'push'
@@ -67,11 +73,11 @@ jobs:
           name: PDF
           path: ${{ inputs.directory }}/${{ inputs.name }}.pdf
 
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "${{ inputs.directory }}"
+      # - name: Upload Pages Artifact
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: "${{ inputs.directory }}"
       
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      # - name: Deploy to GitHub Pages
+      #   id: deployment
+      #   uses: actions/deploy-pages@v4

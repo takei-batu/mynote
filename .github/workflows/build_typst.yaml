@@ -7,13 +7,19 @@ on:
       directory:
         description: "ディレクトリ"
         required: true
-        default: "*"
-        type: string
+        type: choice
+        options:
+          - "Semantics with Applications"
       name:
         description: "名前"
         required: false
         default: "main"
         type: string
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build_typst_documents:
@@ -24,12 +30,16 @@ jobs:
         with:
           fetch-depth: 2
 
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v6
+
       - name: 変更された.typを取得
+        if: github.event_name == 'push'
         id: typ_path
         uses: tj-actions/changed-files@v44
         with:
           files: "**/*.typ"
-          diff_filter: "ACMRT"
+          # diff_filter: "ACMRT"
 
       - name: Typst_auto
         if: github.event_name == 'push'
@@ -37,12 +47,12 @@ jobs:
         with:
           source_file: ${{ steps.typ_path.outputs.all_changed_files }}
 
-      - name: Upload PDF file
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v4
-        with:
-          name: PDF
-          path: "**/*.pdf"
+      # - name: Upload PDF file
+      #   if: github.event_name == 'push'
+      #   uses: actions/upload-artifact@v6
+      #   with:
+      #     name: PDF
+      #     path: "**/*.pdf"
 
       - name: Typst_direct
         if: github.event_name == 'workflow_dispatch'
@@ -50,9 +60,18 @@ jobs:
         with:
           source_file: ${{ inputs.directory }}/${{ inputs.name }}.typ
 
-      - name: Upload PDF file
-        if: github.event_name == 'workflow_dispatch'
-        uses: actions/upload-artifact@v4
-        with:
-          name: PDF
-          path: ${{ inputs.directory }}/${{ inputs.name }}.pdf
+      # - name: Upload PDF file
+      #   if: github.event_name == 'workflow_dispatch'
+      #   uses: actions/upload-artifact@v6
+      #   with:
+      #     name: PDF
+      #     path: ${{ inputs.directory }}/${{ inputs.name }}.pdf
+
+      # - name: Upload Pages Artifact
+      #   uses: actions/upload-pages-artifact@v6
+      #   with:
+      #     path: "."
+      
+      # - name: Deploy to GitHub Pages
+      #   id: deployment
+      #   uses: actions/deploy-pages@v4

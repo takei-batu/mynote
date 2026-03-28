@@ -1,0 +1,58 @@
+name: Build Typst document
+on: 
+  push:
+    paths: "**/*.typ"
+  workflow_dispatch:
+    inputs:
+      directory:
+        description: "ディレクトリ"
+        required: true
+        default: "*"
+        type: string
+      name:
+        description: "名前"
+        required: false
+        default: "main"
+        type: string
+
+jobs:
+  build_typst_documents:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+
+      - name: 変更された.typを取得
+        id: typ_path
+        uses: tj-actions/changed-files@v44
+        with:
+          files: "**/*.typ"
+          diff_filter: "ACMRT"
+
+      - name: Typst_auto
+        if: github.event_name == 'push'
+        uses: lvignoli/typst-action@main
+        with:
+          source_file: ${{ steps.typ_path.outputs.all_changed_files }}
+
+      - name: Upload PDF file
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PDF
+          path: "**/*.pdf"
+
+      - name: Typst_direct
+        if: github.event_name == 'workflow_dispatch'
+        uses: lvignoli/typst-action@main
+        with:
+          source_file: ${{ inputs.directory }}/${{ inputs.name }}.typ
+
+      - name: Upload PDF file
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PDF
+          path: ${{ inputs.directory }}/${{ inputs.name }}.pdf

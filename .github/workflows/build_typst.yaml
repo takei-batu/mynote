@@ -45,16 +45,32 @@ jobs:
           "${{ inputs.directory }}/${{ inputs.name }}.typ" \
           "${{ inputs.directory }}_note.pdf"
         # "${{ inputs.directory }}/${{ inputs.name }}.pdf"
+      
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
 
-      - name: Upload to InfiniCloud (WebDAV)
+      - name: Install pyzotero
+        run: pip install pyzotero
+
+      - name: Upload to Zotero API
         env:
-          WEBDAV_USER: ${{ secrets.INFINICLOUD_USER }}
-          WEBDAV_PASS: ${{ secrets.INFINICLOUD_PASS }}
-          WEBDAV_URL: ${{ secrets.INFINICLOUD_URL }}
-        run: |
-          curl \
-          -T "${{ inputs.directory }}_note.pdf" \
-          -u "${WEBDAV_USER}:${WEBDAV_PASS}" "${WEBDAV_URL}zotero/test/${{ inputs.directory }}_note.pdf"
+          ZOTERO_USER_ID: ${{ secrets.ZOTERO_USER_ID }}
+          ZOTERO_API_KEY: ${{ secrets.ZOTERO_API_KEY }}
+          PDF_PATH: "${{ inputs.directory }}_note.pdf"
+          PDF_TITLE: "${{ inputs.directory }} Note"
+        run: python upload_to_zotero.py
+
+      # - name: Upload to InfiniCloud (WebDAV)
+      #   env:
+      #     WEBDAV_USER: ${{ secrets.INFINICLOUD_USER }}
+      #     WEBDAV_PASS: ${{ secrets.INFINICLOUD_PASS }}
+      #     WEBDAV_URL: ${{ secrets.INFINICLOUD_URL }}
+      #   run: |
+      #     curl \
+      #     -T "${{ inputs.directory }}_note.pdf" \
+      #     -u "${WEBDAV_USER}:${WEBDAV_PASS}" "${WEBDAV_URL}zotero/test/${{ inputs.directory }}_note.pdf"
 
       # - name: Setup Pages
       #   uses: actions/configure-pages@v6

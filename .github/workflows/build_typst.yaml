@@ -39,7 +39,11 @@ jobs:
         uses: typst-community/setup-typst@v5
 
       - name: Compile Typst
-        run: typst compile "${{ inputs.directory }}/${{ inputs.name }}.typ" "${{ inputs.directory }}/${{ inputs.name }}.pdf"
+        run: |
+          typst compile \
+          --root . \
+          "${{ inputs.directory }}/${{ inputs.name }}.typ" \
+          "${{ inputs.directory }}/${{ inputs.name }}.pdf"
 
       # - name: Setup Pages
       #   uses: actions/configure-pages@v6

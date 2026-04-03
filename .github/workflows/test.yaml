@@ -14,9 +14,10 @@ jobs:
           WEBDAV_USER: ${{ secrets.INFINICLOUD_USER }}
           WEBDAV_PASS: ${{ secrets.INFINICLOUD_PASS }}
           WEBDAV_URL: ${{ secrets.INFINICLOUD_URL }}
+          URL : "${WEBDAV_URL}zotero/"
         run: |
           echo "接続テストを開始します..."
-          echo "設定されているURL: '${WEBDAV_URL}'"
+          echo "設定されているURL: '$URL'"
           
           if [ -z "$WEBDAV_URL" ]; then
             echo "❌ エラー: WEBDAV_URLが空です。GitHub Secretsの設定を確認してください。"
@@ -24,7 +25,7 @@ jobs:
           fi
 
           # curlを使ってHTTPステータスコードだけを取得
-          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" -u "${WEBDAV_USER}:${WEBDAV_PASS}" "${WEBDAV_URL}zotero/My Library/")
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" -u "${WEBDAV_USER}:${WEBDAV_PASS}" "$URL")
 
           echo "HTTPステータスコード: ${STATUS_CODE}"
 

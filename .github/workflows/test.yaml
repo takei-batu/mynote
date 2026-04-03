@@ -16,7 +16,7 @@ jobs:
           WEBDAV_URL: ${{ secrets.INFINICLOUD_URL }}
         run: |
           echo "接続テストを開始します..."
-          echo "設定されているURL: '${WEBDAV_URL}'"
+          echo "設定されているURL: ${WEBDAV_URL}zotero/"
           
           if [ -z "$WEBDAV_URL" ]; then
             echo "❌ エラー: WEBDAV_URLが空です。GitHub Secretsの設定を確認してください。"

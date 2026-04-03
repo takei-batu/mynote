@@ -1,4 +1,4 @@
-#import "../Semantics with Applications/setting.typ":*
+#import "setting.typ":*
 #show: conf
 
 #include "chap1.typ"

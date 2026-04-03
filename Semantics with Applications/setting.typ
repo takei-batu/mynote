@@ -23,7 +23,7 @@
   // 本文の設定
   set text(
     lang: "ja",
-    font: ("New Computer Modern", "Yu Mincho"),
+    font: ("New Computer Modern", "Noto Serif JP"),
   )
   show heading.where(level: 1): it => {
     my-countor.step(level: 1)

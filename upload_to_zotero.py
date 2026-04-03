@@ -6,6 +6,8 @@ library_id = os.environ['ZOTERO_USER_ID']
 api_key = os.environ['ZOTERO_API_KEY']
 library_type = 'user' # 個人ライブラリを指定
 
+collection_key = "XF2ZCLJG"
+
 # Zoteroクライアントの初期化
 zot = zotero.Zotero(library_id, library_type, api_key)
 
@@ -16,6 +18,8 @@ print("Zoteroに親アイテム（文献データ）を作成中...")
 # ドキュメント型の空アイテムを作成
 template = zot.item_template('document')
 template['title'] = title
+template['collections'] = [collection_key]
+
 resp = zot.create_items([template])
 
 # 作成したアイテムのIDを取得

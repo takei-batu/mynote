@@ -47,15 +47,15 @@ jobs:
         # "${{ inputs.directory }}/${{ inputs.name }}.pdf"
 
       - name: Upload to InfiniCloud (WebDAV)
-        env:
-          WEBDAV_USER: ${{ secrets.INFINICLOUD_USER }}
-          WEBDAV_PASS: ${{ secrets.INFINICLOUD_PASS }}
-          WEBDAV_URL: ${{ secrets.INFINICLOUD_URL }}
+        # env:
+          # WEBDAV_USER: ${{ secrets.INFINICLOUD_USER }}
+          # WEBDAV_PASS: ${{ secrets.INFINICLOUD_PASS }}
+          # WEBDAV_URL: ${{ secrets.INFINICLOUD_URL }}
         run: |
           curl \
           -T "${{ inputs.directory }}_note.pdf" \
           -u "${{ secrets.INFINICLOUD_USER }}:${{ secrets.INFINICLOUD_PASS }}" \
-          "INFINICLOUD_URL/test/${{ inputs.directory }}_note.pdf"
+          "${{ secrets.INFINICLOUD_URL }}/test/${{ inputs.directory }}_note.pdf"
 
       # - name: Setup Pages
       #   uses: actions/configure-pages@v6

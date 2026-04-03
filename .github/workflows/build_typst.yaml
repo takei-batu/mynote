@@ -82,6 +82,11 @@ jobs:
           name: PDF
           path: ${{ inputs.directory }}/${{ inputs.name }}.pdf
 
+      # - name: Prepare Pages directory
+      #   run: |
+      #     mkdir -p public/"${{ inputs.directory }}"
+      #     cp "${{ inputs.directory }}/${{ inputs.name }}.pdf" public/"${{ inputs.directory }}/"
+
       # - name: Upload Pages Artifact
       #   uses: actions/upload-pages-artifact@v3
       #   with:

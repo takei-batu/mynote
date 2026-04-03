@@ -135,10 +135,10 @@
 === The Complementary View
 == The Example Language While
 #Ex[
-  a
+  略
 ]
 #Ex[
-  a
+  略
 ]
 == Semantics of Expressions
 
@@ -324,7 +324,6 @@ $ State() = Var() -> Int() $
 #align(center)[
   #table(
     columns: 2,
-    // rows: 3,
     inset : (x: 30pt, y: 10pt),
     stroke: (x, y) => (
       left: if x <= 1 {1pt}, 
@@ -503,7 +502,7 @@ $
 ]
 
 #Ex[
-  $Bexp()'$についての意味論は$Bexp()'$の意味論に以下を追加すればよい．
+  $Bexp()'$の意味論は$Bexp()$の意味論に以下を追加すればよい．
   $
   cal(B)[|b_1 or b_2|]s & =
   cases(
@@ -521,12 +520,11 @@ $
     & ff() & "if" cal(B)[|b_1|]s != cal(B)[|b_2|]s
   ) \
 $
-二つ目の主張は$b' = b_1 or b_2 | b_1 => b_2 | b_1 <=> b_2$だけ考えればよい（それ以外は$b' = b$でよい．）．
+二つ目の主張は$b' = b_1 or b_2 | b_1 => b_2 | b_1 <=> b_2$だけ考えればよい（それ以外は$b' = b$でよい）．
 それぞれ以下の表のように対応させればよい：
 #align(center)[
   #table(
     columns: 2,
-    // rows: 3,
     inset : (x: 10pt, y: 10pt),
     stroke: (x, y) => (
       left: if x <= 1 {1pt}, 
@@ -535,7 +533,7 @@ $
       bottom: if y > 2 {1pt}, 
     ),
     [$b'$], [$b$],
-    [$b_1 or b_2$], [$not b_1 and not b_2$],
+    [$b_1 or b_2$], [$not(not b_1 and not b_2)$],
     [$b_1 => b_2$], [$not(b_1 and not b_2)$],
     [$b_1 <=> b_2$], [$not(b_1 and not b_2) and not(b_2 and not b_1)$],
   )
@@ -544,14 +542,68 @@ $
 
 == Properties of the Semantics
 
+後半では式についての二つの性質に関心をもつ．
++ 式の値は式に現れない変数の値に依存しないこと．
++ 変数を式で置き換えたとき，状態も同様の変化をしてよいこと．
+以下でこれらを形式化し証明する．
+
 === Free Variables
 
+算術式$a$の自由変数はその中に出現する変数の集合である．
+形式的には$Var()$の部分集合$"FV"(a)$の構成的定義で与える：
+$
+  "FV"(n) &= emptyset \
+  "FV"(x) &= {x} \
+  "FV"(a_1 + a_2) &= "FV"(a_1) union "FV"(a_2) \
+  "FV"(a_1 star a_2) &= "FV"(a_1) union "FV"(a_2) \
+  "FV"(a_1 - a_2) &= "FV"(a_1) union "FV"(a_2) \
+$
+
 #Lem[
-  a
+  $s, s'$を任意の$x in "FV"(a)$に対して$s x = s' x$を満たす状態とする．
+  このとき，$cal(A)[|a]s = cal(A)[|a]s'$.
+
+  #proof[
+    算術式の構造的帰納法を用いてかなり詳細な証明を与える．
+    まずは$Aexp()$の基本要素に対して考える．
+
+    $n$の場合：
+    算術式の定義から$cal(A)[|n|]s = cal(N)[|n|], cal(A)[|n|]s' = cal(N)[|n|]$である．
+    よって，
+    $cal(A)[|n|]s = cal(A)[|n|]s'.$
+
+    $x$の場合：
+    算術式の定義から$cal(A)[|x|]s = s x, cal(A)[|x|]s' = s' x$である．
+    補題の仮定より$x in "FV"(x)$に対して$s x = s' x$なので，
+    明らかに成り立つ．
+
+    次は$Aexp()$の複合要素に対して行う．
+
+    $a_1 + a_2$の場合：
+    算術式の定義から$cal(A)[|a_1 + a_2|]s = cal(A)[|a_1|]s + cal(A)[|a_2|]s, cal(A)[|a_1 + a_2|]s' = cal(A)[|a_1|]s' + cal(A)[|a_2|]s'$である．
+    $a_i (i = 1, 2)$が$a_1 + a_2$の直接の部分式であり，
+    $"FV"(a_1) subset.eq "FV"(a_1 + a_2)$なので，
+    $a_i$に対して帰納法の仮定（つまり補題）を適用でき，
+    $cal(A)[|a_i]s = cal(A)[|a_i]s'$を得る．
+    $a_1 + a_2$についても同様に補題が成り立つことが簡単に分かる．
+
+    $a_1 star a_2$と$a_1 - a_2$の場合は同じパターンであるから省略する．
+  ]
 ]
 
+同様に，
+ブール式の自由変数の集合を以下のように定義できる：
+$
+  "FV"(vtrue()) &= emptyset \
+  "FV"(vfalse()) &= emptyset \
+  "FV"(a_1 = a_2) &= "FV"(a_1) union "FV"(a_2) \
+  "FV"(a_1 <= a_2) &= "FV"(a_1) union "FV"(a_2) \
+  "FV"(not b) &= "FV"(b) \
+  "FV"(b_1 and b_2) &= "FV"(b_1) union "FV"(b_2) \
+$
+
 #Ex[
-  a
+  略
 ]
 
 === Substitutions
@@ -568,7 +620,7 @@ $
       = cal(A)[|n[y|->a_0]|]s
       = cal(A)[|n|]s.
     $
-    また，$cal(A)[|a|]s = cal(A)[|n|]s = "const."$なので，
+    $cal(A)[|n|]s$は$s$に依存しないので，
     $
       cal(A)[|a[y|->a_0]|]s = cal(A)[|n|]s = cal(A)[|n|](s[y|->cal(A)[|a_0|]s]) = cal(A)[|a|](s[y|->cal(A)[|a_0|]s]).
     $
@@ -625,7 +677,7 @@ $
 ]
 
 #Ex[
-  a
+  略
 ]
 
 = Operational Semantics

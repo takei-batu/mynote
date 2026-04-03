@@ -8,28 +8,29 @@ library_type = 'user' # 個人ライブラリを指定
 
 collection_key = "436E26CC"
 
-# Zoteroクライアントの初期化
-zot = zotero.Zotero(library_id, library_type, api_key)
-
-# pdf_path = 'output.pdf'
-# title = 'Typst Compile Result'
 pdf_path = os.environ.get('PDF_PATH', 'output.pdf')
 title = os.environ.get('PDF_TITLE', 'Typst Compile Result')
 
-print("Zoteroに親アイテム（文献データ）を作成中...")
-# ドキュメント型の空アイテムを作成
+zot = zotero.Zotero(library_id, 'user', api_key)
+
+print(f"Zoteroに親アイテムを作成中... (タイトル: {title})")
 template = zot.item_template('document')
 template['title'] = title
 template['collections'] = [collection_key]
-
 resp = zot.create_items([template])
-
-# 作成したアイテムのIDを取得
 parent_id = resp['successful']['0']['key']
-print(f"親アイテム作成完了 (ID: {parent_id})")
 
-print("PDFをアップロードして添付中...")
-# 対象のPDFを、先ほど作成した親アイテムに添付
-zot.attachment_simple([pdf_path], parent_id)
+print("添付ファイルのデータ（枠組み）を作成中...")
+# ファイル実体ではなく、Zotero上に「ファイル置き場の枠」だけを作ります
+att_template = zot.item_template('attachment', 'imported_file')
+att_template['title'] = pdf_path
+att_template['filename'] = pdf_path
 
-print("Zoteroへの登録とPDFアップロードが完了しました！")
+att_resp = zot.create_items([att_template], parentid=parent_id)
+attachment_key = att_resp['successful']['0']['key']
+print(f"添付ファイルの枠を作成完了 (ID: {attachment_key})")
+
+# 追加：GitHub Actionsの次のステップにこのIDを渡す
+env_file = os.getenv('GITHUB_ENV')
+with open(env_file, "a") as f:
+    f.write(f"ATTACHMENT_KEY={attachment_key}\n")

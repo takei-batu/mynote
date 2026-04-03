@@ -5,7 +5,7 @@ from pyzotero import zotero
 # 認証情報
 library_id = os.environ['ZOTERO_USER_ID']
 api_key = os.environ['ZOTERO_API_KEY']
-collection_key = '****' # あなたのコレクションキー
+collection_key = '436E26CC' # あなたのコレクションキー
 
 pdf_filename = os.environ.get('PDF_PATH', 'output.pdf')
 title = os.environ.get('PDF_TITLE', 'Typst Note')

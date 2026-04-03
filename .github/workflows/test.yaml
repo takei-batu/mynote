@@ -15,38 +15,41 @@ jobs:
           WEBDAV_PASS: ${{ secrets.INFINICLOUD_PASS }}
           WEBDAV_URL: ${{ secrets.INFINICLOUD_URL }}
         run: |
-          echo "接続テストを開始します..."
+          # echo "接続テストを開始します..."
           echo "設定されているURL: ${WEBDAV_URL}zotero/"
           
-          if [ -z "$WEBDAV_URL" ]; then
-            echo "❌ エラー: WEBDAV_URLが空です。GitHub Secretsの設定を確認してください。"
-            exit 1
-          fi
+          # if [ -z "$WEBDAV_URL" ]; then
+          #   echo "❌ エラー: WEBDAV_URLが空です。GitHub Secretsの設定を確認してください。"
+          #   exit 1
+          # fi
 
-          # curlを使ってHTTPステータスコードだけを取得
-          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" -u "${WEBDAV_USER}:${WEBDAV_PASS}" "${WEBDAV_URL}zotero/")
+          # # curlを使ってHTTPステータスコードだけを取得
+          # STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" -u "${WEBDAV_USER}:${WEBDAV_PASS}" "${WEBDAV_URL}zotero/")
 
-          echo "HTTPステータスコード: ${STATUS_CODE}"
+          # echo "HTTPステータスコード: ${STATUS_CODE}"
 
-          # ステータスコードに応じた判定
-          case $STATUS_CODE in
-            200|207)
-              echo "✅ 成功: URLは存在し、認証も通っています。"
-              ;;
-            401)
-              echo "❌ 認証エラー (401): URLは存在しますが、ユーザー名かパスワードが間違っています。"
-              exit 1
-              ;;
-            404)
-              echo "❌ Not Found (404): サーバーは存在しますが、指定したディレクトリがありません。"
-              exit 1
-              ;;
-            000)
-              echo "❌ 接続失敗 (000): URLの形式がおかしいか、サーバーに到達できませんでした。"
-              exit 1
-              ;;
-            *)
-              echo "⚠️ 予期しないステータスコード (${STATUS_CODE}) です。"
-              exit 1
-              ;;
-          esac
+          # # ステータスコードに応じた判定
+          # case $STATUS_CODE in
+          #   200|207)
+          #     echo "✅ 成功: URLは存在し、認証も通っています。"
+          #     ;;
+          #   401)
+          #     echo "❌ 認証エラー (401): URLは存在しますが、ユーザー名かパスワードが間違っています。"
+          #     exit 1
+          #     ;;
+          #   404)
+          #     echo "❌ Not Found (404): サーバーは存在しますが、指定したディレクトリがありません。"
+          #     exit 1
+          #     ;;
+          #   000)
+          #     echo "❌ 接続失敗 (000): URLの形式がおかしいか、サーバーに到達できませんでした。"
+          #     exit 1
+          #     ;;
+          #   *)
+          #     echo "⚠️ 予期しないステータスコード (${STATUS_CODE}) です。"
+          #     exit 1
+          #     ;;
+          # esac
+          curl -s -X PROPFIND -H "Depth: 1" \
+            -u "${WEBDAV_USER}:${WEBDAV_PASS}" \
+            "${WEBDAV_URL}zotero/" | grep -oP '(?<=<D:href>).*?(?=</D:href>)'

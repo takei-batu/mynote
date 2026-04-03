@@ -27,14 +27,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 2
+        # with:
+        #   fetch-depth: 2
 
       - name: Install Japanese Fonts
         run: |
-          mkdir -p ~/.local/share/fonts
-          curl -L "https://github.com/googlefonts/noto-cjk/raw/main/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf" -o ~/.local/share/fonts/NotoSansCJKjp-Regular.otf
-          fc-cache -f -v
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v5
+
+      - name: Compile Typst
+        run: typst compile "${{ inputs.directory }}/${{ inputs.name }}.typ" "${{ inputs.directory }}/${{ inputs.name }}.pdf"
 
       # - name: Setup Pages
       #   uses: actions/configure-pages@v6
@@ -60,11 +65,11 @@ jobs:
       #     name: PDF
       #     path: "**/*.pdf"
 
-      - name: Typst_direct
-        if: github.event_name == 'workflow_dispatch'
-        uses: lvignoli/typst-action@main
-        with:
-          source_file: ${{ inputs.directory }}/${{ inputs.name }}.typ
+      # - name: Typst_direct
+      #   if: github.event_name == 'workflow_dispatch'
+      #   uses: lvignoli/typst-action@main
+      #   with:
+      #     source_file: ${{ inputs.directory }}/${{ inputs.name }}.typ
 
       - name: Upload PDF file
         if: github.event_name == 'workflow_dispatch'

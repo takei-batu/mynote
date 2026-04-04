@@ -47,11 +47,15 @@ jobs:
         # "${{ inputs.directory }}/${{ inputs.name }}.pdf"
         
       - name: Upload to Google Drive
-        uses: workon/gdrive-upload@v1
+        uses: Jishu-Sahu/google-drive-upload-action@v1
         with:
-          client_id: ${{ secrets.GDRIVE_CLIENT_ID }}
-          client_secret: ${{ secrets.GDRIVE_CLIENT_SECRET }}
-          refresh_token: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
-          folder_id: ${{ secrets.GDRIVE_FOLDER_ID }}
+          credentials: |
+            {
+              "client_id": "${{ secrets.GDRIVE_CLIENT_ID }}",
+              "client_secret": "${{ secrets.GDRIVE_CLIENT_SECRET }}",
+              "refresh_token": "${{ secrets.GDRIVE_REFRESH_TOKEN }}",
+              "type": "authorized_user"
+            }
           filename: "${{ inputs.directory }}_note.pdf"
+          folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
           overwrite: "true"

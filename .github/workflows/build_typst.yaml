@@ -47,15 +47,21 @@ jobs:
         # "${{ inputs.directory }}/${{ inputs.name }}.pdf"
         
       - name: Upload to Google Drive
-        uses: Jishu-Sahu/google-drive-upload-action@v1
-        with:
-          credentials: |
-            {
-              "client_id": "${{ secrets.GDRIVE_CLIENT_ID }}",
-              "client_secret": "${{ secrets.GDRIVE_CLIENT_SECRET }}",
-              "refresh_token": "${{ secrets.GDRIVE_REFRESH_TOKEN }}",
-              "type": "authorized_user"
-            }
-          filename: "${{ inputs.directory }}_note.pdf"
-          folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
-          overwrite: "true"
+        run: |
+          # 1. ツールをインストール（これは必ず成功します）
+          sudo apt-get update && sudo apt-get install -y rclone
+          
+          # 2. 設定ファイルを作成（あなたのOAuth情報を流し込みます）
+          cat <<EOF > rclone.conf
+          [mydrive]
+          type = drive
+          client_id = ${{ secrets.GDRIVE_CLIENT_ID }}
+          client_secret = ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          scope = drive.file
+          token = {"access_token":"dummy","token_type":"Bearer","refresh_token":"${{ secrets.GDRIVE_REFRESH_TOKEN }}","expiry":"2000-01-01T00:00:00Z"}
+          EOF
+
+          # 3. アップロード実行（リポジトリの存在に依存しません）
+          rclone --config rclone.conf copyto \
+            "${{ inputs.directory }}_note.pdf" \
+            "mydrive:${{ secrets.GDRIVE_FOLDER_ID }}/${{ inputs.directory }}_note.pdf"

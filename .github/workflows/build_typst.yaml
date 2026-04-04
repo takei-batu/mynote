@@ -46,10 +46,10 @@ jobs:
           "${{ inputs.directory }}_note.pdf"
         # "${{ inputs.directory }}/${{ inputs.name }}.pdf"
 
-      # - name: Upload to Google Drive
-      #     uses: adityak74/google-drive-upload-git-action@main
-      #     with:
-      #       credentials: ${{ secrets.GDRIVE_CREDENTIALS }}
-      #       filename: ${{ inputs.directory }}_note.pdf
-      #       folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
-      #       overwrite: "true"
+      - name: Upload to Google Drive
+          uses: adityak74/google-drive-upload-git-action@main
+          with:
+            credentials: ${{ secrets.GDRIVE_CREDENTIALS }}
+            filename: ${{ inputs.directory }}_note.pdf
+            folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
+            overwrite: "true"

@@ -47,10 +47,11 @@ jobs:
         # "${{ inputs.directory }}/${{ inputs.name }}.pdf"
         
       - name: Upload to Google Drive
-        uses: adityak74/google-drive-upload-git-action@main
+        uses: workon/gdrive-upload@v1
         with:
-          credentials: ${{ secrets.GDRIVE_CREDENTIALS }}
+          client_id: ${{ secrets.GDRIVE_CLIENT_ID }}
+          client_secret: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          refresh_token: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+          folder_id: ${{ secrets.GDRIVE_FOLDER_ID }}
           filename: "${{ inputs.directory }}_note.pdf"
-          folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
           overwrite: "true"
-          userEmail: "shunsukeika@gmail.com"

@@ -5,3 +5,5 @@
 // #Ex[
 //   a
 // ]
+
+== Natural Semantics

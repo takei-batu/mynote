@@ -53,3 +53,4 @@ jobs:
           filename: "${{ inputs.directory }}_note.pdf"
           folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
           overwrite: "true"
+          userEmail: "shunsukeika@gmail.com"

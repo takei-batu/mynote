@@ -48,10 +48,8 @@ jobs:
         
       - name: Upload to Google Drive
         run: |
-          # 1. ツールをインストール（これは必ず成功します）
           sudo apt-get update && sudo apt-get install -y rclone
           
-          # 2. 設定ファイルを作成（あなたのOAuth情報を流し込みます）
           cat <<EOF > rclone.conf
           [mydrive]
           type = drive
@@ -59,9 +57,12 @@ jobs:
           client_secret = ${{ secrets.GDRIVE_CLIENT_SECRET }}
           scope = drive.file
           token = {"access_token":"dummy","token_type":"Bearer","refresh_token":"${{ secrets.GDRIVE_REFRESH_TOKEN }}","expiry":"2000-01-01T00:00:00Z"}
+          # ここで保存先フォルダのIDをルートとして固定します
+          root_folder_id = ${{ secrets.GDRIVE_FOLDER_ID }}
           EOF
 
-          # 3. アップロード実行（リポジトリの存在に依存しません）
+          # root_folder_id を指定したため、宛先は "mydrive:" だけで
+          # 自動的にそのフォルダ内を指すようになります
           rclone --config rclone.conf copyto \
             "${{ inputs.directory }}_note.pdf" \
-            "mydrive:${{ secrets.GDRIVE_FOLDER_ID }}/${{ inputs.directory }}_note.pdf"
+            "mydrive:${{ inputs.directory }}_note.pdf"

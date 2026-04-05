@@ -102,3 +102,69 @@
 #let truth = math.bold("T")
 #let tt = math.bold("tt")
 #let ff = math.bold("ff")
+
+#let ass = $"ass"_"ns"$
+#let skip = $"skip"_"ns"$
+#let comp = $"comp"_"ns"$
+#let iftt = $"if"_"ns"^(thin"tt")$
+#let ifff = $"if"_"ns"^(thin"ff")$
+#let whilett = $"while"_"ns"^(thin"tt")$
+#let whileff = $"while"_"ns"^(thin"ff")$
+#let cfg(S, s) = $lr(chevron.l #S, thick #s chevron.r)$
+#let vskip = math.mono("skip")
+
+#import "@preview/curryst:0.6.0": rule, prooftree, rule-set
+
+#let assT() = rule(
+  $cfg(x := a, s) -> s[x |-> cal(A)[|a|]s]$
+)
+
+#let skipT() = rule(
+  $cfg(vskip, s) -> s$
+)
+
+#let compT() = rule(
+  [$cfg(S_1, s) -> s'$],
+  [$cfg(S_2, s') -> s''$],
+  [$cfg(S_1\;S_2, s) -> s''$],
+)
+
+#let ifttT(nameflag:false) = rule(
+  name: [
+    #if nameflag {
+      $thick "if" cal(B)[|b|]s = tt$
+    }
+  ],
+  [$cfg(S_1, s) -> s'$],
+  [$cfg(mono("if") b mono("then") S_1 mono("else") S_2, s') -> s''$],
+)
+
+#let ifffT(nameflag:false) = rule(
+  name: [
+    #if nameflag {
+      $thick "if" cal(B)[|b|]s = ff$
+    }
+  ],
+  [$cfg(S_2, s) -> s'$],
+  [$cfg(mono("if") b mono("then") S_1 mono("else") S_2, s') -> s''$],
+)
+
+#let whilettT(nameflag:false) = rule(
+  name: [
+    #if nameflag {
+      $thick "if" cal(B)[|b|]s = tt$
+    }
+  ],
+  [$cfg(S, s) -> s'$],
+  [$cfg(mono("while") b mono("do") S, s') -> s''$],
+  [$cfg(mono("while") b mono("do") S, s) -> s''$],
+)
+
+#let whileffT(nameflag:false) = rule(
+  name: [
+    #if nameflag {
+      $thick "if" cal(B)[|b|]s = ff$
+    }
+  ],
+  $cfg(mono("while") b mono("do") S, s) -> s$
+)

@@ -4,7 +4,6 @@
 #let my-countor = counter("my-countor")
 
 #let conf(doc) = {
-  
   // 和洋混合文章の空白制御
   show: cjk-spacer
   // 見出し

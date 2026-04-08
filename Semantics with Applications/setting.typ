@@ -11,6 +11,7 @@
     pagebreak(weak: true)
     it
   }
+  show math.equation.where(block: true): it => block(width: 100%, it)
   show heading: it => {
     if it.level >= 3{
       block(it.body, above: 1.5em)

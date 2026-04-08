@@ -192,3 +192,12 @@
 
 #let five = math.bold("5")
 #let seven = math.bold("7")
+#let vwhile = math.mono("while")
+#let vdo = math.mono("do")
+#let vif = math.mono("if")
+#let vthen = math.mono("then")
+#let velse = math.mono("else")
+#let vrepeat = math.mono("repeat")
+#let vuntil = math.mono("until")
+#let repeattt = $"repeat"_"ns"^(thin"tt")$
+#let repeatff = $"repeat"_"ns"^(thin"ff")$

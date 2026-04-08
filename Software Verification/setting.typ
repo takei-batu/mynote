@@ -4,6 +4,7 @@
 #let my-countor = counter("my-countor")
 
 #let conf(doc) = {
+  
   // 和洋混合文章の空白制御
   show: cjk-spacer
   // 見出し
@@ -11,6 +12,7 @@
     // pagebreak(weak: true)
     it
   }
+  show math.equation.where(block: true): it => block(width: 100%, it)
   show heading: it => {
     if it.level >= 3{
       block(it.body, above: 1.5em)

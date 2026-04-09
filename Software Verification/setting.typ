@@ -8,7 +8,7 @@
   show: cjk-spacer
   // 見出し
   show heading.where(level: 1): it => {
-    // pagebreak(weak: true)
+    pagebreak(weak: true)
     it
   }
   show math.equation.where(block: true): it => block(width: 100%, it)

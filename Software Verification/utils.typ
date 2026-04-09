@@ -54,6 +54,7 @@
 #let vx = math.mono("x")
 #let vy = math.mono("y")
 #let vz = math.mono("z")
+#let vd = math.mono("d")
 #let vzero = math.mono("0")
 #let vone = math.mono("1")
 

@@ -430,9 +430,13 @@ $
     numbering: _ => [[$repeattt$]]
   )[
     $
-      trans(vrepeat S vuntil b, s, s)
-      quad
-      "if" cal(B)[|b|]s = tt
+      #prooftree(
+        rule(
+          name : [if $cal(B)[|b|]s' = tt$],
+          $trans(S, s, s')$,
+          $trans(vrepeat S vuntil b, s, s')$,
+        )
+      )
     $
   ]
   #math.equation(
@@ -450,55 +454,58 @@ $
       )
     $
   ]
-  最後に$vrepeat S vuntil b$と$vif b vthen vskip velse  (S;vrepeat S vuntil b)$は意味的に同値であることを示す．
+  最後に$vrepeat S vuntil b$と$S\;vif b vthen vskip velse  (S;vrepeat S vuntil b)$は意味的に同値であることを示す．
    #proof[
-    - 任意の状態$s, s'$に対して
+    $s, s'$を任意の状態とする．
+    - まず
       $
         (*) : trans(vrepeat S vuntil b, s, s'') => (**) : trans(S\;vif b vthen vskip velse  (vrepeat S vuntil b), s, s'')
       $
       を示す．
-      $(*)$が成り立つとき，
-      導出木$T$が存在する．
+      $(*)$を仮定すると，
+      $(*)$を根にもつ導出木$T$が存在する．
       $T$は$[repeatff]$か$[repeattt]$のどちらかの適用により構成される．
       - $[repeattt]$の場合：
-        $cal(B)[|b|]s = tt$であり，
-        $s = s''$でなければならない．
-        よって$T$は以下の形になっている．
-        $
-          trans(vrepeat S vuntil b, s, s)
-        $
-        公理$[skip]$（と$s = s''$）より導出木
-        $
-          trans(vskip, s, s)
-        $
-        を得る．
-        これに$[ifff]$を適用すると，
+        $T$は以下の形になっている．
         $
           #prooftree(
             rule(
-              $trans(vskip, s, s)$,
-              $trans(vif b vthen vskip velse  (vrepeat S vuntil b), s, s)$
+              // $trans(S, s, s')$,
+              $T'$,
+              $trans(vrepeat S vuntil b, s, s'')$,
             )
           )
         $
-        ここで，
-        ある$s'$に対して
+        ここで$T'$は
         $
-          trans(S, s, s'),
+          trans(S, s, s'')
         $
-        が得られたとすると，
-        この$s'$に関して
-        導出木$T_s$を考えると$s' = s$でなければならない．
-        さらに$[comp]$を適用すると，
+        を根に持たなければならない．
+        次に公理$[skip]$より導出木
+        $
+          trans(vskip, s'', s'')
+        $
+        を得る．
+        ここで，$cal(B)[|b|]s'' = tt$であり，
+        これに$[iftt]$を適用すると，
         $
           #prooftree(
             rule(
-              $trans(S, s, s')$,
+              $trans(vskip, s'', s'')$,
+              $trans(vif b vthen vskip velse  (vrepeat S vuntil b), s'', s'')$
+            )
+          )
+        $
+        この導出木と$T'$に$[comp]$を適用すると，
+        $
+          #prooftree(
+            rule(
+              $T'$,
               rule(
                 $trans(vskip, s', s'')$,
                 $trans(vif b vthen vskip velse  (vrepeat S vuntil b), s', s'')$
               ),
-              $trans(vif b vthen vskip velse  (vrepeat S vuntil b), s, s'')$
+              $trans(S\;vif b vthen vskip velse  (vrepeat S vuntil b), s, s'')$
             )
           )
         $
@@ -541,83 +548,63 @@ $
           )
         $
 
-    - 次に任意の状態$s, s'$に対して$(**) => (*)$を示す．
-      $(**)$が成り立つとき，
-      導出木$T$が存在する．
-      $T$は$[iftt]$か$[ifff]$のどちらかの適用により構成される．
+    - 逆に$(**) => (*)$を示す．
+      $(**)$を仮定すると，
+      $(**)$を根にもつ
+      導出木
+      $
+        #prooftree(
+          rule(
+            $T$,
+            $T'$,
+            $trans(S\;vif b vthen vskip velse  (vrepeat S vuntil b), s, s'')$
+          )
+        )
+      $
+      が存在する．
+      ここで，
+      ある$s'$を用いて
+      $T$は$trans(S, s, s')$を，
+      $T'$は$trans(vif b vthen vskip velse  (vrepeat S vuntil b), s', s'')$を根にもつ導出木である．
+      さらに，$T'$は$[iftt]$か$[ifff]$のどちらかの適用により構成される．
       - $[iftt]$の場合：
-        $cal(B)[|b|] = tt$であり，
-        導出木
+        $cal(B)[|b|]s' = tt$であり，
+        // 導出木
+        // $
+        //   trans(vskip, s, s'')
+        // $
+        // が得られ，
+        // 公理$[skip]$により$s = s''$でなければならない．
+        $T$に$[repeattt]$を適用して，
         $
-          trans(vskip, s, s'')
-        $
-        が得られ，
-        公理$[skip]$により$s = s''$でなければならない．
-        そこで公理$[repeattt]$を適用して，
-        $(*)$に対応する導出木を得られる．
+        #prooftree(
+          rule(
+            $T$,
+            $trans(vrepeat S vuntil b, s, s')$
+          )
+        )
+      $
+        が得られる．
       - $[ifff]$の場合：
-        $T$の構成から$cal(B)[|b|] = ff$であり，
-        $
-          trans(S\;vrepeat S vuntil b, s, s'')
-        $
-        を根にもつ導出木が得られる．
-        これは$S_1;S_2$の形であり，
-        これを構成するただ一つの規則は$[comp]$である．
-        したがって，
-        ある状態$s'$に対して
-        $
-          trans(S, s, s')
-        $
-        および
+        $T'$の構成から$cal(B)[|b|]s' = ff$であり，
         $
           trans(vrepeat S vuntil b, s', s'')
         $
-        を根にもつ
-        導出木$T_2$および$T_3$が存在する．
-        $T_2$と$T_3$に$repeatff$を適用することで$(*)$に対応する導出木を得る．
+        を根にもつ導出木$T''$が得られる．
+        // これは$S_1;S_2$の形であり，
+        // これを構成するただ一つの規則は$[comp]$である．
+        したがって，
+        $T$と$T''$に$[repeatff]$を適用して，
+        $
+          #prooftree(
+            rule(
+              $T$,
+              $T''$,
+              $trans(vrepeat S vuntil b, s, s'')$
+            )
+          )
+        $
+        が得られる．
       これで証明は完了した．
   ]
-]
-
-#Ex[
-  $While$の$Stm$カテゴリーを以下のように拡張する：
-  $
-    S ::= x := a | vskip | S_1;S_2 | vif b vthen S_1 velse S_2 | vwhile b vdo S | vfor x := a_1 vto a_2 vdo S
-  $
-  次に$vfor x := a_1 vto a_2 vdo S$に関する遷移関係を以下のように定める：
-  #math.equation(
-    block: true,
-    numbering: _ => [[$fortt$]]
-  )[
-    $
-      #prooftree(
-        rule(
-          name : [if $cal(B)[|a_1 <= a_2|]s = tt$],
-          $trans(S, s, s')$,
-          $trans(vfor x := a_1 vto a_2 vdo S, s', s'')$,
-          $trans(vfor x := a_1 vto a_2 vdo S, s, s'')$,
-        )
-      )
-    $
-  ]
-  #math.equation(
-    block: true,
-    numbering: _ => [[$forff$]]
-  )[
-    $
-      trans(vfor x := a_1 vto a_2 vdo S, s, s)
-      quad
-      "if" cal(B)[|a_1 <= a_2|]s = ff
-    $
-  ]
-  $s vx = five$のとき，
-  $
-    #prooftree(
-      rule(
-        $trans(y := vone, s, s')$,
-        $trans(vfor vz := one vto vx vdo S, s', s'')$,
-        $trans(y := vone \; vfor vz := vone vto vx vdo S, s, s'')$
-      )
-    )
-  $
 ]

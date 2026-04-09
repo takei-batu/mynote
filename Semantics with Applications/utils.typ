@@ -201,3 +201,7 @@
 #let vuntil = math.mono("until")
 #let repeattt = $"repeat"_"ns"^(thin"tt")$
 #let repeatff = $"repeat"_"ns"^(thin"ff")$
+#let vfor = math.mono("for")
+#let vto = math.mono("to")
+#let fortt = $"for"_"ns"^(thin"tt")$
+#let forff = $"for"_"ns"^(thin"ff")$

@@ -226,11 +226,12 @@ $While$には
 ただし$While$の拡張ではそうである必要はない．
 
 #Eg[
-  
+  階乗を求めるプログラムの導出木を構成している．
+  一度に全体を構成するのではなく，主張したい遷移関係を根にもつ導出木から順に規則の適用を丁寧に追いながら構成している．
 ]
 
 #Ex[
-  $vz$に$vx$と$vy$の商（の整数部分）を返すプログラム．
+  $s vx = seven$と$s vy = five$の場合で考える．
   // `z:= 0; while y <= x do (z:=z+1; x:=x-y)`
   $
     #prooftree(
@@ -257,26 +258,36 @@ $While$には
     c = vz := vzero ; vwhile (vy <= vx) vdo (vz := vz + vone ; vx := vx - vy) \
     c_1 = vz := vz + vone \
     c_2 = vx := vx - vy \
-    s = [7 slash x, 5 slash y] \
-    s' = [7 slash x, 5 slash y, 1 slash z] \
-    s'' = [2 slash x, 5 slash y, 1 slash z] \
+    s = [seven slash x, five slash y] \
+    s' = [seven slash x, five slash y, one slash z] \
+    s'' = [two slash x, five slash y, one slash z] \
   $
 ]
 
 状態$s$での実行$S$が
-- *終了する*$<=> trans(S, s, s')$となる状態$s$が存在する．
-- *ループする*$<=> trans(S, s, s')$となる状態$s$が存在しない．
-- *常に終了する*$<=>$ 任意の$s$に対して$trans(S, s, s')$となる状態$s$が存在する．
-- *常にループする*$<=>$ 任意の$s$に対して$trans(S, s, s')$となる状態$s$が存在しない．
+- *終了する*$<=> trans(S, s, s')$となる状態$s'$が存在する．
+- *ループする*$<=> trans(S, s, s')$となる状態$s'$が存在しない．
+- *常に終了する*$<=>$ 任意の$s$に対して$trans(S, s, s')$となる状態$s'$が存在する．
+- *常にループする*$<=>$ 任意の$s$に対して$trans(S, s, s')$となる状態$s'$が存在しない．
 
 #Ex[
+  各文を$S$とする．
   - 常に終了するわけでも、常にループするわけでもない．
-    - 常に終了しないことは，例えば$s vx = 0$となる$s$を選べばよい（厳密な反証は省略）．
-    - 常にループしないことは$s vx = vone$となる$s$をとれば明らか．
+    - $s vx = zero$となる$s$に対して$trans(S, s, s')$となる状態$s'$が存在しないので，常に終了しない（厳密な反証は省略）．
+    - $s vx = one$となる$s$に対して$trans(S, s, s)$となるので（$[whileff]$），常にループしない．
   - 常に終了する(常にループしない)．\
-    $s vx < 0$となる$s$に対しては$s$を，$s vx >= 1$となる$s$に対しては$s[0 |-> x, (cal(A)[|vx|]s)! |-> y]$を選べばよい．
-  - 常にループする(常に終了しない)．\
-    厳密な反証は省略．
+    $s vx < zero$となる$s$に対しては$s$を，$s vx >= one$となる$s$に対しては$s[vx |-> zero, vy |-> (cal(A)[|vx|]s)!]$を選べばよい．
+  - 常にループする(常に終了しない)．
+    以下の導出木の繰り返しになる（厳密な反証は略）：
+    $
+      #prooftree(
+        rule(
+          $trans(vskip, s, s)$,
+          $trans(S, s, s)$,
+          $trans(S, s, s)$,
+        )
+      )
+    $
 ]
 
 === Properties of the Semantics
@@ -431,7 +442,7 @@ $
     $
       #prooftree(
         rule(
-          name : [if $cal(B)[|b|]s = ff$],
+          name : [if $cal(B)[|b|]s' = ff$],
           $trans(S, s, s')$,
           $trans(vrepeat S vuntil b, s', s'')$,
           $trans(vrepeat S vuntil b, s, s'')$,
@@ -439,18 +450,18 @@ $
       )
     $
   ]
-  最後に$vrepeat S vuntil b$と$vif b vthen vskip velse  (S;vrepeat S vuntil b)$は意味的に同値であることを示す（$vwhile b vdo S$と双対？証明の構造は2.5とほぼ同じ）．
+  最後に$vrepeat S vuntil b$と$vif b vthen vskip velse  (S;vrepeat S vuntil b)$は意味的に同値であることを示す．
    #proof[
     - 任意の状態$s, s'$に対して
       $
-        (*) : trans(vrepeat S vuntil b, s, s'') => (**) : trans(vif b vthen vskip velse  (S;vrepeat S vuntil b), s, s'')
+        (*) : trans(vrepeat S vuntil b, s, s'') => (**) : trans(S\;vif b vthen vskip velse  (vrepeat S vuntil b), s, s'')
       $
       を示す．
       $(*)$が成り立つとき，
       導出木$T$が存在する．
       $T$は$[repeatff]$か$[repeattt]$のどちらかの適用により構成される．
       - $[repeattt]$の場合：
-        $cal(B)[|b|] = tt$であり，
+        $cal(B)[|b|]s = tt$であり，
         $s = s''$でなければならない．
         よって$T$は以下の形になっている．
         $
@@ -458,15 +469,36 @@ $
         $
         公理$[skip]$（と$s = s''$）より導出木
         $
-          trans(vskip, s, s'')
+          trans(vskip, s, s)
         $
         を得る．
         これに$[ifff]$を適用すると，
         $
           #prooftree(
             rule(
-              $trans(vskip, s, s'')$,
-              $trans(vif b vthen vskip velse  (S;vrepeat S vuntil b), s, s'')$
+              $trans(vskip, s, s)$,
+              $trans(vif b vthen vskip velse  (vrepeat S vuntil b), s, s)$
+            )
+          )
+        $
+        ここで，
+        ある$s'$に対して
+        $
+          trans(S, s, s'),
+        $
+        が得られたとすると，
+        この$s'$に関して
+        導出木$T_s$を考えると$s' = s$でなければならない．
+        さらに$[comp]$を適用すると，
+        $
+          #prooftree(
+            rule(
+              $trans(S, s, s')$,
+              rule(
+                $trans(vskip, s', s'')$,
+                $trans(vif b vthen vskip velse  (vrepeat S vuntil b), s', s'')$
+              ),
+              $trans(vif b vthen vskip velse  (vrepeat S vuntil b), s, s'')$
             )
           )
         $
@@ -482,31 +514,29 @@ $
           )
         $
         ここで，
-        $T_1$は$trans(S, s, s')$を根にもつ導出木，
+        $T_1$は$trans(S, s, s')$を，
         $T_2$は$trans(vrepeat S vuntil b, s', s'')$を根にもつ導出木である．
         さらに，
-        $cal(B)[|b|] = ff$である．
-        $T_1, T_2$に対して$[comp]$を適用すると，
+        $cal(B)[|b|]s' = ff$であるから，
+        $T_2$に$[iftt]$を適用すると，
         $
           #prooftree(
             rule(
-              $T_1$,
               $T_2$,
-              $trans(S\;vrepeat S vuntil b, s, s'')$,
+              $trans(vif b vthen vskip velse  (vrepeat S vuntil b), s', s'')$
             )
           )
         $
-        $cal(B)[|b|] = ff$より，
-        $[iftt]$を適用すると，
+        $T_1$とこの導出木に対して$[comp]$を適用すると，
         $
           #prooftree(
             rule(
+              $T  _1$,
               rule(
-                $T_1$,
                 $T_2$,
-                $trans(S\;vrepeat S vuntil b, s, s'')$,
+                $trans(vif b vthen vskip velse  (vrepeat S vuntil b), s', s'')$
               ),
-              $trans(vif b vthen vskip velse  (S;vrepeat S vuntil b), s, s'')$
+              $trans(S\;vif b vthen vskip velse  (vrepeat S vuntil b), s, s'')$
             )
           )
         $
@@ -547,4 +577,47 @@ $
         $T_2$と$T_3$に$repeatff$を適用することで$(*)$に対応する導出木を得る．
       これで証明は完了した．
   ]
+]
+
+#Ex[
+  $While$の$Stm$カテゴリーを以下のように拡張する：
+  $
+    S ::= x := a | vskip | S_1;S_2 | vif b vthen S_1 velse S_2 | vwhile b vdo S | vfor x := a_1 vto a_2 vdo S
+  $
+  次に$vfor x := a_1 vto a_2 vdo S$に関する遷移関係を以下のように定める：
+  #math.equation(
+    block: true,
+    numbering: _ => [[$fortt$]]
+  )[
+    $
+      #prooftree(
+        rule(
+          name : [if $cal(B)[|a_1 <= a_2|]s = tt$],
+          $trans(S, s, s')$,
+          $trans(vfor x := a_1 vto a_2 vdo S, s', s'')$,
+          $trans(vfor x := a_1 vto a_2 vdo S, s, s'')$,
+        )
+      )
+    $
+  ]
+  #math.equation(
+    block: true,
+    numbering: _ => [[$forff$]]
+  )[
+    $
+      trans(vfor x := a_1 vto a_2 vdo S, s, s)
+      quad
+      "if" cal(B)[|a_1 <= a_2|]s = ff
+    $
+  ]
+  $s vx = five$のとき，
+  $
+    #prooftree(
+      rule(
+        $trans(y := vone, s, s')$,
+        $trans(vfor vz := one vto vx vdo S, s', s'')$,
+        $trans(y := vone \; vfor vz := vone vto vx vdo S, s, s'')$
+      )
+    )
+  $
 ]

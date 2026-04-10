@@ -55,8 +55,16 @@
 #let vy = math.mono("y")
 #let vz = math.mono("z")
 #let vd = math.mono("d")
+#let vr = math.mono("r")
+#let vs = math.mono("s")
 #let vzero = math.mono("0")
 #let vone = math.mono("1")
+#let vtwo = math.mono("2")
 
 #let cfg(S, s) = $lr(chevron.l #S, thick #s chevron.r)$
 #let trans(S, s1, s2) = $cfg(#S, s1) -> s2$
+
+#let asg = raw(":=")
+#let neq = raw("!=")
+#let leq = raw("<=")
+#let req = raw(">=")

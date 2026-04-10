@@ -21,11 +21,11 @@
 =
 
 #Asg[
-  $c = vz := vz + vone ; vx := vx - vy$とする．
+  $c = vz asg vz + vone ; vx asg vx - vy$とする．
   $
     &
     #cfg(
-      $vz := vzero ; vwhile (vy <= vx) vdo c$,
+      $vz asg vzero ; vwhile (vy <= vx) vdo c$,
       $[12 slash x, 5 slash y]$
     ) \
     =>
@@ -104,7 +104,7 @@
 ]
 
 #Asg[
-  $c_1 = vy := vx * vy, c_2 = vx := vx - 1$とする．
+  $c_1 = vy asg vx * vy, c_2 = vx asg vx - 1$とする．
 
   主張を少し拡張して，
   任意の自然数$n$と整数$m$に対して，
@@ -216,5 +216,175 @@
 =
 
 #Asg[
+  $c' = vy asg vy -1$
+
+  $c'' = vx asg 2 * vx$
+
+  $c = vy asg vy -1 ; vx asg 2 * vx = c';c''$
+
+  $w equiv vwhile vy neq vzero vdo (vy asg vy -1 ; vx asg 2 * vx) equiv vwhile vy neq vzero vdo c$
+
+  $A equiv Y >= 0 and x = 1 and y = Y$
+
+  $B equiv x = 2^Y$
+
+  $
+    A
+    & => Y >= 0 and x = 2^0 and 0 = Y - y \
+    & => x = 2^(Y - y)
+  $
+
+  $I equiv x = 2^(Y - y)$
+
+  $
+    I and not (y != 0) => I and (y = 0) => B
+  $
+
+  $I' equiv I[2 * x slash x][y - 1 slash y]$
+
+  $I'' equiv I[2 * x slash x]$
   
+  これより
+  $
+    #prooftree(
+        rule(
+          $A => I$,
+          rule(
+            rule(
+              $I and y != 0 => I'$,
+              rule(
+                ${I'} c' {I''}$,
+                ${I''} c'' {I}$,
+                ${I'} c {I}$,
+              ),
+              $I => I$,
+              ${I and y != 0} c {I}$,
+            ),
+            ${I} w {I and not (y != 0)}$,
+          ),
+          $I and not (y != 0) => B$,
+          ${A} w {B}$,
+        ),
+    ) 
+    $
+]
+
+#Asg[
+  $c_0 = vr asg vzero$
+
+  $c_1 = vs asg vone$
+
+  $c_2 = c_0 ; c_1$
+
+  $c_3 = vr asg vr + 1 - vone$
+
+  $c_4 = vs asg vs + vtwo * vr + vone$
+
+  $c_5 = c_3 ; c_4$
+
+  $w = vwhile vs leq vx vdo c_5$
+
+  $c = c_2 ; w$
+
+  $A equiv x >= 0$
+
+  $B equiv r^2 <= x and x < (r + 1)^2$
+
+  $
+    A 
+    & => A and 1 = 1 and 0 = 0 \
+    & equiv (A and s = 1 and r = 0)[1 slash s][0 slash r]
+  $
+
+  $P equiv A and s = 1 and r = 0$
+
+  #math.equation(
+    block: true,
+    numbering: _ => $[T_1]$,
+  )[
+    $
+      #prooftree(
+        rule(
+                $A => P[1 slash s][0 slash r]$,
+                rule(
+                  ${P[1 slash s][0 slash r]} c_0 {P[1 slash s]}$,
+                  ${P[1 slash s]} c_1 {P}$,
+                  ${P[1 slash s][0 slash r]} c_2 {P}$,
+                ),
+                $P => P$,
+                ${A} c_2 {P}$,
+            ),
+      )
+    $
+  ]
+
+    ここで，
+  $
+    P
+    & => 0 <= x and s = 1 and r = 0 \
+    & => 0 <= x and s = 1 and 1 = (r + 1)^2 and 0 = r^2 \
+    & => r^2 <= x and s = 1 and 1 = (r + 1)^2 and 0 = r^2 \
+    & => r^2 <= x and s = (r + 1)^2
+  $
+
+  $I equiv r^2 <= x and s = (r + 1)^2$
+
+  $
+    I and not (s <= x) 
+    & => r^2 <= x and s = (r + 1)^2 and not (s <= x)) \
+    & => r^2 <= x and s = (r + 1)^2 and x < s \
+    & => B
+  $
+
+  $
+    z = x times d 
+    & => z + x = x times d + x \
+    & => z + x = x times (d + 1) \ 
+    & equiv (z = x times d )[z + x slash z][d + 1 slash d]
+  $
+  および
+  $
+    d < y 
+    & => exists n [1 <= n and d + n = y] \
+    & => exists n [1 <= n and d + 1 <= y] \
+    & => exists n [1 <= n] and d + 1 <= y \
+    & => d + 1 <= y \
+    & equiv (d <= y)[z + x slash z][d + 1 slash d]
+  $
+  より，
+  $
+    I and d < y => z = x times d and d < y => I[z + x slash z][d + 1 slash d]
+  $
+
+  $I_1 equiv I[d + 1 slash d][z + x slash z]$
+
+  $I_2 equiv I[d + 1 slash d]$
+
+  #math.equation(
+    block: true,
+    numbering: _ => $[T_2]$,
+  )[
+    $
+    #prooftree(
+        rule(
+          $P => I$,
+          rule(
+            rule(
+              $I and d < y => I_1$,
+              rule(
+                ${I_1} c_1 {I_2}$,
+                ${I_2} c_2 {I}$,
+                ${I_1} c {I}$,
+              ),
+              $I => I$,
+              ${I and d < y} c_0 {I}$,
+            ),
+            ${I} w {I and not (d < y)}$,
+          ),
+          $I and not (d < y) => B$,
+          ${P} w {B}$,
+        ),
+    ) 
+    $
+  ]
 ]

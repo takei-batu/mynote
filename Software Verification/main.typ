@@ -44,9 +44,13 @@
 #Ex[
   $c equiv vz := vzero ; vd := 0 ; vwhile vd < vy vdo (vz := vz + vx; vd := vd + vone)$
 
-  $c' equiv vz := vz + vx; vd := vd + vone$
+  $c_0 equiv vz := vz + vx ; vd := vd + vone$
 
-  $w = vwhile vd < vy vdo (vz := vz + vx; vd := vd + vone) = vwhile vd < vy vdo c$
+  $c_1 equiv vz := vz + vx$
+
+  $c_2 equiv vd := vd + vone$
+
+  $w equiv vwhile vd < vy vdo (vz := vz + vx; vd := vd + vone)$
 
   $A equiv 0 <= y$
 
@@ -68,7 +72,11 @@
       #prooftree(
         rule(
                 $A => P[0 slash z][0 slash d]$,
-                ${P[0 slash z][0 slash d]} vz := vzero ; vd := vzero {P}$,
+                rule(
+                  ${P[0 slash d][0 slash z]} vz := vzero {P[0 slash d]}$,
+                  ${P[0 slash d]} vd := vzero {P}$,
+                  ${P[0 slash z][0 slash d]} vz := vzero ; vd := vzero {P}$,
+                ),
                 $P => P$,
                 ${A} vz := vzero ; vd := vzero {P}$,
             ),
@@ -117,23 +125,28 @@
     I and d < y => z = x times d and d < y => I[z + x slash z][d + 1 slash d]
   $
 
-  $I' = I[z + x slash z][d + 1 slash d]$
+  $I_1 equiv I[d + 1 slash d][z + x slash z]$
+
+  $I_2 equiv I[d + 1 slash d]$
 
   #math.equation(
     block: true,
     numbering: _ => $[T_2]$,
   )[
     $
-      // T_2 :
     #prooftree(
         rule(
           $P => I$,
           rule(
             rule(
-              $I and d < y => I'$,
-              ${I'} c' {I}$,
+              $I and d < y => I_1$,
+              rule(
+                ${I_1} c_1 {I_2}$,
+                ${I_2} c_2 {I}$,
+                ${I_1} c {I}$,
+              ),
               $I => I$,
-              ${I and d < y} c' {I}$,
+              ${I and d < y} c_0 {I}$,
             ),
             ${I} w {I and not (d < y)}$,
           ),
@@ -148,21 +161,10 @@
   $
     #prooftree(
         rule(
-          // rule(
-          //     $A => P[0 slash z][0 slash d]$,
-          //     ${P[0 slash z][0 slash d]} vz := vzero ; vd := vzero {P}$,
-          //     $P => P$,
-          //     ${A} vz := vzero ; vd := vzero {P}$,
-          // ),
           $T_1$,
           $T_2$,
           ${A} c {B}$,
         ),
-      // rule(
-      //   $tack.double A => A_1$,
-      //   $tack.double B => B$,
-      //   ${A} c {B}$
-      // ),
     )
   $
   を得る．

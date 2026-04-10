@@ -270,21 +270,21 @@
 ]
 
 #Asg[
-  $c_0 = vr asg vzero$
+  $c_r = vr asg vzero$
 
-  $c_1 = vs asg vone$
+  $c_s = vs asg vone$
 
-  $c_2 = c_0 ; c_1$
+  $c_(r s) = c_r ; c_s$
 
-  $c_3 = vr asg vr + 1 - vone$
+  $c'_r = vr asg vr + vone$
 
-  $c_4 = vs asg vs + vtwo * vr + vone$
+  $c'_s = vs asg vs + vtwo * vr + vone$
 
-  $c_5 = c_3 ; c_4$
+  $c'_(r s) = c_r ; c_s$
 
-  $w = vwhile vs leq vx vdo c_5$
+  $w = vwhile vs leq vx vdo c'_(r s)$
 
-  $c = c_2 ; w$
+  $c = c_(r s) ; w$
 
   $A equiv x >= 0$
 
@@ -307,12 +307,12 @@
         rule(
                 $A => P[1 slash s][0 slash r]$,
                 rule(
-                  ${P[1 slash s][0 slash r]} c_0 {P[1 slash s]}$,
-                  ${P[1 slash s]} c_1 {P}$,
-                  ${P[1 slash s][0 slash r]} c_2 {P}$,
+                  ${P[1 slash s][0 slash r]} c_r {P[1 slash s]}$,
+                  ${P[1 slash s]} c_s {P}$,
+                  ${P[1 slash s][0 slash r]} c_(r s) {P}$,
                 ),
                 $P => P$,
-                ${A} c_2 {P}$,
+                ${A} c_(r s) {P}$,
             ),
       )
     $
@@ -337,28 +337,30 @@
   $
 
   $
-    z = x times d 
-    & => z + x = x times d + x \
-    & => z + x = x times (d + 1) \ 
-    & equiv (z = x times d )[z + x slash z][d + 1 slash d]
+    s = (r + 1)^2 and s <= x => (r + 1)^2 <= x
   $
   および
   $
-    d < y 
-    & => exists n [1 <= n and d + n = y] \
-    & => exists n [1 <= n and d + 1 <= y] \
-    & => exists n [1 <= n] and d + 1 <= y \
-    & => d + 1 <= y \
-    & equiv (d <= y)[z + x slash z][d + 1 slash d]
+    s = (r + 1)^2 
+    &=> s + 2(r + 1) + 1 \
+    &= (r + 1)^2 + 2(r + 1) + 1 \
+    &= r^2 + 2r + 1 + 2r + 2 + 1 \
+    &= r^2 + 4r + 4 \
+    &= (r + 2)^2 \
+    &= (r + 1 + 1)^2 \
   $
   より，
   $
-    I and d < y => z = x times d and d < y => I[z + x slash z][d + 1 slash d]
+    I and s <= x 
+    & => s = (r + 1)^2 and s <= x \
+    & => (r + 1)^2 <= x and s + 2 times (r + 1) + 1 = (r + 1 + 1)^2 \
+    &=> (r^2 <= x and s + 2r + 1 = (r + 1)^2) [r + 1 slash r] \
+    &=> I[s + 2r + 1 slash s][r + 1 slash r] \
   $
 
-  $I_1 equiv I[d + 1 slash d][z + x slash z]$
+  $I_(s r) equiv I[s + 2r + 1 slash s][r + 1 slash r]$
 
-  $I_2 equiv I[d + 1 slash d]$
+  $I_s equiv [s + 2r + 1 slash s]$
 
   #math.equation(
     block: true,
@@ -370,21 +372,33 @@
           $P => I$,
           rule(
             rule(
-              $I and d < y => I_1$,
+              $I and s <= x => I_(s r)$,
               rule(
-                ${I_1} c_1 {I_2}$,
-                ${I_2} c_2 {I}$,
-                ${I_1} c {I}$,
+                ${I_(s r)} c'_r {I_s}$,
+                ${I_s} c'_s {I}$,
+                ${I_(s r)} c'_(r s) {I}$,
               ),
               $I => I$,
-              ${I and d < y} c_0 {I}$,
+              ${I and s <= x} c'_(r s) {I}$,
             ),
-            ${I} w {I and not (d < y)}$,
+            ${I} w {I and not (s <= x)}$,
           ),
-          $I and not (d < y) => B$,
+          $I and not (s <= x) => B$,
           ${P} w {B}$,
         ),
     ) 
     $
   ]
+
+  以上で得られた$T_1, T_2$から
+  $
+    #prooftree(
+        rule(
+          $T_1$,
+          $T_2$,
+          ${A} c {B}$,
+        ),
+    )
+  $
+  を得る．
 ]

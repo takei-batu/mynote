@@ -1,3 +1,4 @@
+#import "@preview/curryst:0.6.0": rule, prooftree, rule-set
 #import "setting.typ":my-countor
 #let mybox(title, body) = {
   my-countor.step(level: 2)

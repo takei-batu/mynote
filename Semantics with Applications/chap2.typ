@@ -1,4 +1,3 @@
-#import "@preview/curryst:0.6.0": rule, prooftree, rule-set
 #import "utils.typ":*
 
 = Operational Semantics

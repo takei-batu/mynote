@@ -11,8 +11,7 @@
 
   $w = vwhile vy neq vzero vdo c$
 
-  $A equiv Y >= 0 and x = 1 and y = Y$
-
+  $A equiv Y >= 0 and x = 1 and y = Y$,
   $B equiv x = 2^Y$
 
   $
@@ -21,17 +20,15 @@
     & => x = 2^(Y - y)
   $
 
-  $I equiv x = 2^(Y - y)$
+  $I equiv x = 2^(Y - y)$とすると，
 
   $
     I and not (y != 0) => I and (y = 0) => B
   $
 
-  $I' equiv I[2 * x slash x][y - 1 slash y]$
-
-  $I'' equiv I[2 * x slash x]$
+  $I' equiv I[2 * x slash x][y - 1 slash y]$,
+  $I'' equiv I[2 * x slash x]$とすると，
   
-  これより，
   $
     #prooftree(
         rule(
@@ -73,8 +70,7 @@
 
   $c = c_(r s) ; w$
 
-  $A equiv x >= 0$
-
+  $A equiv x >= 0$,
   $B equiv r^2 <= x and x < (r + 1)^2$
 
   $
@@ -114,7 +110,7 @@
     & => r^2 <= x and s = (r + 1)^2
   $
 
-  $I equiv r^2 <= x and s = (r + 1)^2$とする．
+  $I equiv r^2 <= x and s = (r + 1)^2$とすると，
 
   $
     I and not (s <= x) 

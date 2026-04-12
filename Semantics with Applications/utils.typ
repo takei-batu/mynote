@@ -34,6 +34,7 @@
 #let Ex(body) = mybox("Exercise", body)
 #let Fact(body) = mybox("Fact", body)
 #let Lem(body) = mybox("Lemma", body)
+#let Thm(body) = mybox("Theorem", body)
 
 // 証明環境
 #let proof(box:false, body) = {
@@ -205,3 +206,12 @@
 #let vto = math.mono("to")
 #let fortt = $"for"_"ns"^(thin"tt")$
 #let forff = $"for"_"ns"^(thin"ff")$
+
+#let trans2(S, s1, s2) = $cfg(#S, s1) => s2$
+#let ass2 = $"ass"_"sos"$
+#let skip2 = $"skip"_"sos"$
+#let comp21 = $"comp"_"sos"^1$
+#let comp22 = $"comp"_"sos"^2$
+#let iftt2 = $"if"_"sos"^(thin"tt")$
+#let ifff2 = $"if"_"sos"^(thin"ff")$
+#let while2 = $"while"_"sos"$

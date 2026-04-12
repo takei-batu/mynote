@@ -607,3 +607,178 @@ $
       これで証明は完了した．
   ]
 ]
+
+#Ex[]
+
+導出木の構造的帰納法は以下のようにまとめられる．
++ 遷移系の公理に対して主張が成り立つことを示す．
++ 遷移系の各規則の前提に対して主張が成り立つことを仮定して（帰納法の仮定），
+  その規則の条件が満たされている場合に，
+  その帰結に対しても主張が成り立つことを示す．
+
+任意の文$S$, 状態$s, s', s''$に対して，
+$
+  trans(S, s, s') and trans(S, s, s'') => s' = s''
+$
+となることを*決定的*(deterministic)という．
+つまり，
+初期状態$s$における文$S$を実行したとき，
+最終状態$s'$が存在するならば唯一つであるということである．
+
+#Thm[
+  $While$の自然意味論は決定的である．
+]
+
+#Ex[]
+
+=== The Semantic Function *$cal(S)_"ns"$*
+
+文の意味論は$State$から$State$への部分関数としてまとめられる：
+$
+  cal(S)_"ns" : Stm -> (State arrow.r.hook State) 
+$
+各文$S$に対して部分関数
+$
+  cal(S)_"ns" [|S|] in State arrow.r.hook State
+$
+が与えられる．
+これは，
+$
+  cal(S)_"ns" [|S|]s =
+  cases(
+    s' & "if" trans(S, s, s'),
+    "undef" quad& "otherwise"
+  )
+$
+を表す．
+
+#note[
+  Theorem 2.9より，
+  $cal(S)_"ns"$はwell-definedである．
+  例えば，
+  文$vwhile vtrue vdo vskip$は常にループするので（Exercise 2.4），
+  任意の状態$s$に対して
+  $
+    cal(S)_"ns" [|vwhile vtrue vdo vskip|]s = "undef"
+  $
+  となる．
+]
+
+#Ex[]
+
+#Ex[]
+
+#Ex[]
+
+== Structural Operational Semantics
+
+構造的操作意味論において遷移系は以下のように表される：
+$
+  trans2(S, s, gamma)
+$
+ここで，
+$gamma$は$cfg(S', s')$か$s'$のどちらか一方の形である．
+これは文$S$の状態$s$における*第一ステップ*を表している．
+出力は次の二通りがある：
+- $gamma$が$cfg(S', s')$ならば，
+  文$S$の実行は完了して*おらず*，
+  残っている計算が中間の計算状況$cfg(S', s')$で表される．
+- $gamma$が$s'$ならば，
+  文$S$の実行は完了して，
+  その最終状態が$s'$である．
+
+$trans2(S, s, gamma)$となる$gamma$が存在しない場合，
+$cfg(S, s)$は*スタック*する(stuck)という．
+
+#note[
+  stuck は「立ち往生する」，「行き詰る」という意味合いでここでは実行がいつまでも続くことを表す．
+  似た綴りの stack は「積む」という意味であり，データ構造のスタック・ポップのスタックはこちらの意味．
+]
+
+$=>$の定義は以下の規則で与えられる．
+
+#align(center)[
+  #table(
+    columns: 2,
+    align: (left, left),
+    inset : (x: 20pt, y: 1.5em),
+    stroke: none,
+    [[$ass2$]], [$trans2(x := a, s, s[x |-> cal(A)[|a|]s])$],
+    [[$skip2$]], [$trans2(vskip, s, s)$],
+    [[$comp21$]], [$prooftree(rule(trans2(S_1, s, cfg(S'_1, s')), trans2(S_1\;S_2, s, cfg(S'_1\;S_2, s'))))$],
+    [[$comp22$]], [$prooftree(rule(trans2(S_1, s, s'), trans2(S_1\;S_2, s, cfg(S_2, s'))))$],
+    [[$iftt2$]], [$trans2(vif b vthen S_1 velse S_2, s, cfg(S_1, s))$ if $cal(B)[|b|]s = tt$],
+    [[$ifff2$]], [$trans2(vif b vthen S_1 velse S_2, s, cfg(S_2, s))$ if $cal(B)[|b|]s = ff$],
+    [[$while2$]], [$trans2(vwhile b vdo S, s, s)$ $cfg(vif b vthen (S;vwhile b vdo S) velse vskip, s)$],
+  )
+]
+
+状態$s$から始まる文$S$の*導出シークエント*(derivation sequence)は次のどちらかである：
++ 有限シークエント
+  $
+    gamma_0, gamma_1, gamma_2, dots.c, gamma_k
+  $
+  ときどき以下のようにも記す
+  $
+    gamma_0 => gamma_1 => gamma_2 => dots.c => gamma_k
+  $
+  ここで，
+  $gamma_0 = cfg(S, s)$, $gamma_i => gamma_(i + 1) (0 <= i < k), k >= 0$であり，
+  $gamma_k$は最終計算状況であるかスタックする．
++ 無現シークエント
+  $
+    gamma_0, gamma_1, gamma_2, dots.c
+  $
+  ときどき以下のようにも記す
+  $
+    gamma_0 => gamma_1 => gamma_2 => dots.c
+  $
+  ここで，
+  $gamma_0 = cfg(S, s)$, $gamma_i => gamma_(i + 1) (0 <= i)$である．
+
+$gamma_0$から$gamma_i$への実行に$i$ステップかかることを$gamma_0 =>^i gamma_i$と記し，
+ある数だけステップがかかることを$gamma_0 =>^* gamma_i$と記す．
+
+#note[
+  $gamma_0 =>^i gamma_i$と$gamma_0 =>^* gamma_i$は導出シークエント*ではなくてよい*．
+  これらが導出シークエントとなるのは，
+  $gamma_i$が最終計算状況になるかスタックするときかつそのときに限る．
+]
+
+#Eg[]
+
+#Eg[]
+
+#Ex[]
+
+#Ex[]
+
+#Ex[]
+
+== Properties of the Semantics
+
+構造的操作意味論において，証明の実行には有限の導出木の*長さ*についての帰納法が役に立つ．
+テクニックは以下のとおりである：
++ 長さが0の導出シークエントで性質が成り立つことを示す．
++ 長さが高々$k$の導出シークエントで性質が成り立つことを仮定して（帰納法の仮定），
+  長さが$k+1$の場合でも成り立つことを示す．
+
+証明の帰納ステップではよく以下のどちらかを検査することで行われる：
+- 構文要素の構造
+- 導出シークエントの最初の遷移を正当化する導出木
+
+#Lem[
+  $cfg(S_1\;S_2, s) =>^k s''$ならば，
+  ある状態$s'$とある自然数$k_1, k_2$が存在して，
+  $
+    cfg(S_1, s) =>^(k_1) s' and cfg(S_2, s') =>^(k_2) s'' and k_1 + k_2 = k.
+  $
+  #proof[
+    $k$についての帰納法，
+    すなわち導出シークエント$cfg(S_1\;S_2, s) =>^k s''$の長さの帰納法による．
+  ]
+]
+
+#Ex[]
+
+#Ex[]

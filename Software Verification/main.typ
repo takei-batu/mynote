@@ -5,3 +5,4 @@
 
 #include "day1.typ"
 #include "day2.typ"
+#include "day3.typ"

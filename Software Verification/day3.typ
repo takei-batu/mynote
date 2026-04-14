@@ -11,7 +11,7 @@
     $
   - $g(x, y) = max(x, y)$
     $
-      g(x, y) &= h (f(x, y), P_0^1(x, y)) \
+      g(x, y) &= h (f(x, y), P_0^2(x, y)) \
       h (a, b) &= a + b quad ("Example" 3.3)
     $
 ]

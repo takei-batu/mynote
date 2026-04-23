@@ -185,35 +185,111 @@ $f$は_strict_ (*厳密*)という．
   $
   を示す．
 
-  まず，$(D -> D, subset.eq.sq)$がposetであることが以下のようにして示せる．
+  + 【$(D -> D, subset.eq.sq)$がccpoであること】
 
-  $f, f_1, f_2, f_3 in D -> D$を任意とする．
-  - 任意の$d in D$に対して，
-    $subset.eq.sq$の反射性より，
-    $f(d) subset.eq.sq f(d).$
-    よって，
-    $f subset.eq.sq' f$
-  - $subset.eq.sq$の推移性より，
+    まず，
+    $(D -> D, subset.eq.sq)$がposetであることが以下のようにして示せる．
+
+    $f, f_1, f_2, f_3 in D -> D$を任意とする．
+    - 任意の$d in D$に対して，
+      $subset.eq.sq$の反射性より，
+      $f(d) subset.eq.sq f(d).$
+      よって，
+      $f subset.eq.sq' f$
+    - $subset.eq.sq$の推移性より，
+      $
+        f_1 subset.eq.sq' f_2 and f_2 subset.eq.sq' f_3
+        & <=> forall d in D thin [f_1 (d) subset.eq.sq f_2 (d)] and forall d in D thin [f_2 (d) subset.eq.sq f_3 (d)] \
+        & <=> forall d in D thin [f_1 (d) subset.eq.sq f_2 (d) and f_2 (d) subset.eq.sq f_3 (d)] \
+        & => forall d in D thin [f_1 (d) subset.eq.sq f_3 (d)] \
+        & <=> f_1 subset.eq.sq' f_3
+      $
+    - $subset.eq.sq$の反対象性より，
+      $
+        f_1 subset.eq.sq' f_2 and f_2 subset.eq.sq' f_1
+        & <=> forall d in D thin [f_1 (d) subset.eq.sq f_2 (d)] and forall d in D thin [f_2 (d) subset.eq.sq f_1 (d)] \
+        & <=> forall d in D thin [f_1 (d) subset.eq.sq f_2 (d) and f_2 (d) subset.eq.sq f_1 (d)] \
+        & => forall d in D thin [f_1 (d) = f_2 (d)] \
+        & <=> f_1 = f_2
+      $
+    
+    次に$(D -> D, subset.eq.sq')$がccpoであることを示すために，
+    continuousからなる任意の鎖$cal(F) subset D -> D$を考える．
+    各$d in D$に対して，
     $
-      f_1 subset.eq.sq' f_2 and f_2 subset.eq.sq' f_3
-      & <=> forall d in D thin [f_1 (d) subset.eq.sq f_2 (d)] and forall d in D thin [f_2 (d) subset.eq.sq f_3 (d)] \
-      & <=> forall d in D thin [f_1 (d) subset.eq.sq f_2 (d) and f_2 (d) subset.eq.sq f_3 (d)] \
-      & => forall d in D thin [f_1 (d) subset.eq.sq f_3 (d)] \
-      & <=> f_1 subset.eq.sq' f_3
+      (or' cal(F))(d) := or {f(d) | f in cal(F)}
     $
-  - $subset.eq.sq$の反対象性より，
+    と定める．
+    このとき，
+    $or' cal(F) in D -> D$が$cal(F)$の最小上界であることを示す．
+    
+    まず，上記がwell-definedであることを示す．
+    $d in D$を任意とする．
+    $cal(F)$が鎖なので，
+    各$f_1, f_2 in cal(F)$に対して，
     $
-      f_1 subset.eq.sq' f_2 and f_2 subset.eq.sq' f_1
-      & <=> forall d in D thin [f_1 (d) subset.eq.sq f_2 (d)] and forall d in D thin [f_2 (d) subset.eq.sq f_1 (d)] \
-      & <=> forall d in D thin [f_1 (d) subset.eq.sq f_2 (d) and f_2 (d) subset.eq.sq f_1 (d)] \
-      & => forall d in D thin [f_1 (d) = f_2 (d)] \
-      & <=> f_1 = f_2
+    f_1 subset.eq.sq' f_2 or f_2 subset.eq.sq' f_1 <=>
+    f_1(d) subset.eq.sq' f_2(d) or f_2(d) subset.eq.sq' f_1(d)
     $
+    であるから．
+    各$d in D$に対して，
+    ${f(d) | f in cal(F)}$は$D$の鎖である．
+    $D$がccpoであるので，
+    最小上界$or {f(d) | f in cal(F)}$が存在する．
+    次に，
+    $or' cal(F) in cal(F)$，
+    つまり$or' cal(F)$がcontinuousであることを示す．
+    これを示すには$D$の空ではないすべてのchain $Y$に対して，
+    $
+      or {(or' cal(F))(d) | d in Y} = (or' cal(F))(or Y)
+    $
+    を示せばよい．
+    $f in cal(F)$の連続性を用いて以下のように計算できる：
+    $
+      (or' cal(F))(or Y)
+      &= or {f(or Y) | f in cal(F)} \
+      &= or {or {f(d) | d in Y} | f in cal(F)} \
+      &= or {or {f(d) | f in cal(F)} | d in Y} \
+      &= or {(or' cal(F))(d) | d in Y}.
+    $
+    最後に$or' cal(F)$が$cal(F)$の最小上界であることは定義より明らか．
+  + 【$"FIX"$がcontinuousであること】
+
+    $cal(F)$をcontinuousからなる空ではない任意の$D$の鎖とする．
+    - $"FIX"(or' cal(F)) supset.eq.sq' or {"FIX"(f) | f in cal(F)}$について．
+
+      $"FIX"$が単調であることを示せば十分である．
+      $f_1, f_2 in cal(F)$を$f_1 subset.eq.sq' f_2$となるように任意に選ぶ．
+      このとき，
+      $n$に関する帰納法から
+      $f_1^n (bot) subset.eq.sq f_2^n (bot)$である．
+      よって，
+      $"FIX"(f_1) = or {f_1^n (bot) | n >= 0} subset.eq.sq or {f_2^n (bot) | n >= 0} = "FIX"(f_2).$
+    - $"FIX"(or' cal(F)) subset.eq.sq' or {"FIX"(f) | f in cal(F)}$について．
+
+      簡単のために$F = or' cal(F)$とする．
+      このとき，任意の$n >= 0$に対して，
+      $
+        F^n (bot) subset.eq.sq or {"FIX"(f) | f in cal(F)}
+      $
+      を$n$に関する帰納法で示せす．
+      - 基底ケース：
+        $n = 0$のとき，
+        $
+          F^n (bot) = bot subset.eq.sq or {"FIX"(f) | f in cal(F)}.
+        $
+      - 帰納ステップ：
+        $F^n (bot) subset.eq.sq or {"FIX"(f) | f in cal(F)}$を仮定する．
+        $
+          F^(n+1) (bot)
+          &= F(F^(n) (bot)) \
+          &= or {g(F^(n) (bot)) | g in cal(F)} \
+          & subset.eq.sq or {g(or {"FIX"(f) | f in cal(F)}) | g in cal(F)} \
+          &= or {or {g("FIX"(f)) | f in cal(F)} | g in cal(F)}
+        $
+        $g("FIX"(f)) subset.eq.sq h("FIX"(h)) = "FIX"(h) subset.eq.sq or {"FIX"(f) | f in cal(F)}$より，
+        $
+          or {g("FIX"(f)) | f in cal(F)} subset.eq.sq or {"FIX"(f) | f in cal(F)}
+        $
   
-  次に$(D -> D, subset.eq.sq')$であることを示すために，
-  任意の鎖$cal(F) subset D -> D$を考える．
-  // continuous $f in D-> D$に対して，
-  // ${f(d) | d in D}$は$D$の鎖である．
-  // $D$はccpoであるから，${f(d) | f "is continuous"}$の最小上界が存在する．
-  // $cal(F)$を次のように定める．
 ]

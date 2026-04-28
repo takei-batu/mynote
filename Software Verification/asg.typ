@@ -17,3 +17,8 @@
 
 #include "asg1.typ"
 #include "asg2.typ"
+=
+=
+=
+=
+#include "asg7.typ"

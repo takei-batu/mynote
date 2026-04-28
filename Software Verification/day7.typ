@@ -3,11 +3,14 @@
 =
 
 #Ex[
-  - $(forall x. exists y. P(x, y)) or exists x R(x)$ 
+  - $(forall x. exists y. P(x, y) and Q(x, y)) or exists x. R(x)$ 
     $
-      (forall x. exists y. P(x, y)) or exists x R(x)
-      &~ forall x. P(x, f(x)) or R(c) \
-      &~ forall x. (P(x, f(x)) or R(c))
+      (forall x. exists y. P(x, y) and Q(x, y)) or exists z. R(z)
+      &~ exists z. ((forall x. exists y. P(x, y) and Q(x, y)) or R(z)) \
+      &~ (forall x. exists y. P(x, y) and Q(x, y)) or R(c) \
+      &~ (forall x. P(x, f(x)) and Q(x, f(x))) or R(c) \
+      &~ forall x. P(x, f(x)) and Q(x, f(x)) or R(c) \
+      &~ forall x. (P(x, f(x)) or R(c)) and (Q(x, f(x)) or R(c)) \
     $
   - $forall x. not ((forall y. P(x, y)) or exists z. forall u. Q(x, z, u))$
     $

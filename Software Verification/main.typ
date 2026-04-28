@@ -9,3 +9,4 @@
 =
 =
 #include "day6.typ"
+#include "day7.typ"

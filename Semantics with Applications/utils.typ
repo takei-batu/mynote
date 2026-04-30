@@ -9,6 +9,7 @@
     // stroke: luma(150),
   )[
     #block(
+        above: 1em,
         below: 1em,
         // stroke: luma(150),
       )[

@@ -54,8 +54,9 @@ class QueenFormat:
         print(head, body, sep="\n", file=o)
 
 
+# テスト
 if __name__ == "__main__":
-  N = 2
+  N = 150
   SAT = QueenFormat(N)
   # print(SAT.row())
   # print(SAT.only_one_row())
@@ -66,5 +67,5 @@ if __name__ == "__main__":
 
   name = f"N={N}"
   path = os.path.join(os.path.dirname(__file__), f"{name}.cnf")
-  print(f"created CNF for {N}-Queen-problem at '{path}'.")
   SAT.print_DIMACS(path)
+  print(f"created CNF for {N}-Queen-problem at '{path}'.")

@@ -1,8 +1,5 @@
 #import "utils.typ":*
 
-=
-=
-
 = Denotational Semantics
 
 == Direct Style Semantics: Specification

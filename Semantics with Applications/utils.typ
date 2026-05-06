@@ -216,3 +216,5 @@
 #let iftt2 = $"if"_"sos"^(thin"tt")$
 #let ifff2 = $"if"_"sos"^(thin"ff")$
 #let while2 = $"while"_"sos"$
+
+#let cond = math.mono("cond")

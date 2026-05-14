@@ -12,3 +12,5 @@
 #include "day7.typ"
 #include "day8.typ"
 #include "day9.typ"
+#include "day10.typ"
+#include "day11.typ"

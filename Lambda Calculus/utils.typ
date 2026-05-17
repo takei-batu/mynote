@@ -36,7 +36,7 @@
   (name, number, body, color: black) => [
     #set enum(numbering: "1.")
     #v(0.5em) // 上スペース
-    *練習問題 #context counter(heading).display()*#h(0.5em)#body
+    *練習問題#context counter(heading).display()*#h(0.5em)#body
     #v(0.5em) // 下スペース
   ]
 )

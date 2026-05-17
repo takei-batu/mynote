@@ -4,28 +4,28 @@
 
 =
 #Asg[
-  $phi = p and not (bold("XF") p) equiv p and not (bold("X") ("true" bold("U") p))$
+  $phi equiv p and not (bold("XF")p) equiv p and not (bold("X") ("true"bold("U")p))$
 
   $A P = {"true", p}$
 
   $c l(phi) = {
     "true", 
     p, 
-    upright(bold("F"))p, 
-    upright(bold("XF"))p,
+    bold("F")p, 
+    bold("XF")p,
     phi, 
     not ("true"), 
     not p, 
-    not (upright(bold("F")) p), 
-    not (upright(bold("XF")) p),
+    not (bold("F")p), 
+    not (bold("XF")p),
     not phi
   }$
   
   $alpha in a t(phi)$に対して，
   $
     "true" in alpha\
-    phi in alpha <=> p in alpha and not (bold("XF") p) in alpha\
-    not phi in alpha <=> not p in alpha or bold("XF") p in alpha
+    phi in alpha <=> p in alpha and not (bold("XF")p) in alpha\
+    not phi in alpha <=> not p in alpha or bold("XF")p in alpha
   $
   であるので，
   $
@@ -61,9 +61,9 @@
       t, t, f, f, f, f, f, f,
       [$p$],
       t, t, t, t, f, f, f, f,
-      [$upright(bold(X)bold(F))p$],
+      [$bold("XF")p$],
       f, f, t, t, t, t, f, f,
-      [$upright(bold(F))p$],
+      [$bold("F")p$],
       t, f, t, f, t, f, t, f
     )
   ]
@@ -73,19 +73,19 @@
   $
     Q = {q_0} union a t(phi), quad
     Sigma = 2^(A P), quad
-    cal(F) = {F_(upright(bold("F"))p)}
+    cal(F) = {F_(bold("F")p)}
   $
   であり，
   $
-    F_(upright(bold("F"))p) = {alpha_0, alpha_2, alpha_7}.
+    F_(bold("F")p) = {alpha_0, alpha_2, alpha_7}.
   $
 
   初期状態$q_0$からの遷移は$alpha_0$のみである．
   $(alpha_i, hat(beta), beta) in Delta$ならば，
-  + $upright(bold("XF"))p in alpha_i <=> upright(bold("F"))p in beta$
-  + $not upright(bold("XF"))p in alpha_i <=> not (upright(bold("F"))p) in beta$
-  + $upright(bold("F"))p in alpha_i <=> p in alpha_i or upright(bold("F"))p in beta$
-  + $not (upright(bold("F"))p) in alpha_i <=> not p in alpha_i and not (upright(bold("F"))p) in beta$
+  + $bold("XF")p in alpha_i <=> bold("F")p in beta$
+  + $not bold("XF")p in alpha_i <=> not (bold("F")p) in beta$
+  + $bold("F")p in alpha_i <=> p in alpha_i or bold("F")p in beta$
+  + $not (bold("F")p) in alpha_i <=> not p in alpha_i and not (bold("F")p) in beta$
   表と遷移条件から，$alpha_1, alpha_3, alpha_5, alpha_6$からの状態遷移は存在しない．
 
   以上より次の図を得る：
